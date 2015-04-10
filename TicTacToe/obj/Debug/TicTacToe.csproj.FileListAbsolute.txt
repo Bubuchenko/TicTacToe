@@ -1,0 +1,9 @@
+C:\Users\l.pijlman.MCO\Desktop\Qmanage API\Qmanage test\TicTacToe\TicTacToe\bin\Debug\TicTacToe.exe.config
+C:\Users\l.pijlman.MCO\Desktop\Qmanage API\Qmanage test\TicTacToe\TicTacToe\bin\Debug\TicTacToe.exe
+C:\Users\l.pijlman.MCO\Desktop\Qmanage API\Qmanage test\TicTacToe\TicTacToe\bin\Debug\TicTacToe.pdb
+C:\Users\l.pijlman.MCO\Desktop\Qmanage API\Qmanage test\TicTacToe\TicTacToe\obj\Debug\TicTacToe.csprojResolveAssemblyReference.cache
+C:\Users\l.pijlman.MCO\Desktop\Qmanage API\Qmanage test\TicTacToe\TicTacToe\obj\Debug\TicTacToe.Form1.resources
+C:\Users\l.pijlman.MCO\Desktop\Qmanage API\Qmanage test\TicTacToe\TicTacToe\obj\Debug\TicTacToe.Properties.Resources.resources
+C:\Users\l.pijlman.MCO\Desktop\Qmanage API\Qmanage test\TicTacToe\TicTacToe\obj\Debug\TicTacToe.csproj.GenerateResource.Cache
+C:\Users\l.pijlman.MCO\Desktop\Qmanage API\Qmanage test\TicTacToe\TicTacToe\obj\Debug\TicTacToe.exe
+C:\Users\l.pijlman.MCO\Desktop\Qmanage API\Qmanage test\TicTacToe\TicTacToe\obj\Debug\TicTacToe.pdb
