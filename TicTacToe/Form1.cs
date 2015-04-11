@@ -14,9 +14,13 @@ namespace TicTacToe
     {
         //List that contains field combinations that would win you the game
         List<Combination> Combinations = new List<Combination>();
+        int[] Corners = new int[] { 0, 2, 6, 8 };
+        int[] Edges = new int[] { 1, 3, 5, 7 };
 
         List<int> Player1Inventory = new List<int>();
         List<int> Player2Inventory = new List<int>();
+
+        Dictionary<int, int> CornerOpposites = new Dictionary<int, int>();
 
         //Random class used for the initial step of the AI.
         Random random = new Random();
@@ -30,6 +34,104 @@ namespace TicTacToe
                     return false;
                 else
                     return true;
+            }
+        }
+
+        private int Player2TurnCount
+        {
+            get
+            {
+                return Player2Inventory.Count() + 1;
+            }
+        }
+
+        private int Player2CornersOwned
+        {
+            get
+            {
+                int count = 0;
+
+                foreach (int x in Corners)
+                {
+                    if (Player2Inventory.Contains(x))
+                    {
+                        count++;
+                    }
+                }
+                return count;
+            }
+        }
+
+        private int PlayerCornersOwned(Players player)
+        {
+            if (player == Players.Player1)
+            {
+                int count = 0;
+                foreach (int x in Corners)
+                {
+                    if (Player1Inventory.Contains(x))
+                    {
+                        count++;
+                    }
+                }
+                return count;
+            }
+            else
+            {
+                int count = 0;
+                foreach (int x in Corners)
+                {
+                    if (Player2Inventory.Contains(x))
+                    {
+                        count++;
+                    }
+                }
+                return count;
+            }
+        }
+
+        private int PlayerEdgesOwned(Players player)
+        {
+            if (player == Players.Player1)
+            {
+                int count = 0;
+                foreach (int x in Edges)
+                {
+                    if (Player1Inventory.Contains(x))
+                    {
+                        count++;
+                    }
+                }
+                return count;
+            }
+            else
+            {
+                int count = 0;
+                foreach (int x in Edges)
+                {
+                    if (Player2Inventory.Contains(x))
+                    {
+                        count++;
+                    }
+                }
+                return count;
+            }
+        }
+
+        private int Player1EdgesOwned
+        {
+            get
+            {
+                int count = 0;
+
+                foreach (int x in Corners)
+                {
+                    if (Player2Inventory.Contains(x))
+                    {
+                        count++;
+                    }
+                }
+                return count;
             }
         }
 
@@ -47,6 +149,7 @@ namespace TicTacToe
         {
             //Initialize winning combo list
             AddCombinationsToList();
+            AddOppositesToList();
             InitializeComponent();
         }
 
@@ -64,6 +167,19 @@ namespace TicTacToe
             //Diagonal win
             Combinations.Add(new Combination { first = 0, second = 4, third = 8 });
             Combinations.Add(new Combination { first = 2, second = 4, third = 6 });
+        }
+
+        private void AddOppositesToList()
+        {
+            CornerOpposites.Add(0, 8);
+            CornerOpposites.Add(2, 6);
+            CornerOpposites.Add(6, 2);
+            CornerOpposites.Add(8, 0);
+        }
+
+        private int GetOppositeOfCorner(int corner)
+        {
+            return CornerOpposites[corner];
         }
 
 
@@ -135,7 +251,7 @@ namespace TicTacToe
 
         private void CheckForDraws()
         {
-            if(Player1Inventory.Count + Player2Inventory.Count == 9)
+            if (Player1Inventory.Count + Player2Inventory.Count == 9)
             {
                 MessageBox.Show("Draw!");
                 drawScore.Text = (int.Parse(drawScore.Text) + 1).ToString();
@@ -150,101 +266,72 @@ namespace TicTacToe
             //Add a delay to make it feel a bit more realistic
             await Task.Delay(1000);
 
-            if(!Player2FirstTurn)
+            //Prioritize these steps
+            if (CloseMyWin())
+                return;
+            if (BlockFromWin())
+                return;
+
+            //On first turn
+            if (Player2TurnCount == 1)
             {
-                //AI Checks if I am close to a combination
-                if (Player2Inventory.Count > 1)
+                //Always start on a corner
+                int move = Corners[random.Next(0, 4)];
+
+                PlayingField.Enabled = true;
+                PlayingField.Controls.Cast<Button>().Where(f => f.Name.Contains(move.ToString())).FirstOrDefault().PerformClick();
+                return;
+            }
+
+            //On second turn
+            if (Player2TurnCount == 2 || Player2TurnCount == 3 || Player2TurnCount == 4)
+            {
+                //Opponent made a corner move
+                if (PlayerCornersOwned(Players.Player1) > 0)
                 {
-                    foreach (var combination in Combinations)
-                    {
-                        int neroticy = 0;
-                        if (Player2Inventory.Contains(combination.first))
-                        {
-                            neroticy++;
-                        }
-
-                        if (Player2Inventory.Contains(combination.second))
-                        {
-                            neroticy++;
-                        }
-
-                        if (Player2Inventory.Contains(combination.third))
-                        {
-                            neroticy++;
-                        }
-
-                        if (neroticy == 2)
-                        {
-                            //Get the buttons that opponent needs to combo out.
-                            Button[] buttons = PlayingField.Controls.Cast<Button>().Where(f =>
-                                f.Name.Contains(combination.first.ToString()) ||
-                                f.Name.Contains(combination.second.ToString()) ||
-                                f.Name.Contains(combination.third.ToString())).ToArray();
-
-                            Button button;
-
-                            //Make sure the tile is free
-                            button = buttons.Where(f => f.Text == "").FirstOrDefault();
-
-                            if (button != null)
-                            {
-                                PlayingField.Enabled = true;
-                                button.PerformClick();
-                                return;
-                            }
-                        }
-                    }
+                    MakeCornerMove();
+                    return;
                 }
 
-                if (Player1Inventory.Count > 1) //AI Checks if opponent is close to a combination
+                //Opponent made the middle move
+                if (Player1Inventory.Contains(4))
                 {
-                    foreach (var combination in Combinations)
+                    if (Player1Inventory.Contains(0) || Player1Inventory.Contains(2) || Player1Inventory.Contains(6) || Player1Inventory.Contains(8))
                     {
-                        int neroticy = 0;
-
-                        if (Player1Inventory.Contains(combination.first))
-                        {
-                            neroticy++;
-                        }
-
-                        if (Player1Inventory.Contains(combination.second))
-                        {
-                            neroticy++;
-                        }
-
-                        if (Player1Inventory.Contains(combination.third))
-                        {
-                            neroticy++;
-                        }
-
-                        if (neroticy == 2)
-                        {
-                            //Get the buttons that opponent needs to combo out.
-                            Button[] buttons = PlayingField.Controls.Cast<Button>().Where(f =>
-                                f.Name.Contains(combination.first.ToString()) ||
-                                f.Name.Contains(combination.second.ToString()) ||
-                                f.Name.Contains(combination.third.ToString())).ToArray();
-
-                            Button button;
-
-                            //Make sure the tile is free
-                            button = buttons.Where(f => f.Text == "").FirstOrDefault();
-
-                            if (button != null)
-                            {
-                                PlayingField.Enabled = true;
-                                button.PerformClick();
-                                return;
-                            }
-                        }
+                        PlayingField.Enabled = true;
+                        PlayingField.Controls.Cast<Button>().Where(f => f.Name.Contains(GetOppositeOfCorner(Player1Inventory[1]).ToString())).FirstOrDefault().PerformClick();
+                        return;
                     }
+
+                    PlayingField.Enabled = true;
+                    PlayingField.Controls.Cast<Button>().Where(f => f.Name.Contains(GetOppositeOfCorner(Player2Inventory[0]).ToString())).FirstOrDefault().PerformClick();
+                    return;
                 }
             }
+
+            if(Player2TurnCount == 3)
+            {
+                //If player1's first two moves were an edge move, make an opposite corner move
+                if(PlayerEdgesOwned(Players.Player1) > 1)
+                {
+                    PlayingField.Enabled = true;
+                    PlayingField.Controls.Cast<Button>().Where(f => f.Name.Contains(4.ToString())).FirstOrDefault().PerformClick();
+                    return;
+                }
+            }
+
+            MakeCornerMove();
+            return;
+        }
+
+
+        private void MakeRandomMove()
+        {
             //Perform a regular move
             Button btn;
             while (true)
             {
-                int num = random.Next(0, 8);
+                int num = random.Next(0, 9);
                 btn = PlayingField.Controls.Cast<Button>().Where(f => f.Name.Contains(num.ToString())).FirstOrDefault();
                 if (btn.Text == "X" || (btn.Text == "O"))
                     continue;
@@ -255,9 +342,117 @@ namespace TicTacToe
             btn.PerformClick();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void MakeCornerMove()
         {
-            
+            Button bt;
+            while (true)
+            {
+                int move = Corners[random.Next(0, 4)];
+                bt = PlayingField.Controls.Cast<Button>().Where(f => f.Name.Contains(move.ToString())).FirstOrDefault();
+                if (bt.Text == "X" || (bt.Text == "O"))
+                    continue;
+                else
+                    break;
+            }
+
+            PlayingField.Enabled = true;
+            bt.PerformClick();
+        }
+
+        private bool CloseMyWin()
+        {
+            //AI Checks if I am close to a combination
+            if (Player2Inventory.Count > 1)
+            {
+                foreach (var combination in Combinations)
+                {
+                    int neroticy = 0;
+
+                    if (Player2Inventory.Contains(combination.first))
+                    {
+                        neroticy++;
+                    }
+
+                    if (Player2Inventory.Contains(combination.second))
+                    {
+                        neroticy++;
+                    }
+
+                    if (Player2Inventory.Contains(combination.third))
+                    {
+                        neroticy++;
+                    }
+
+                    if (neroticy == 2)
+                    {
+                        //Get the buttons that opponent needs to combo out.
+                        Button[] buttons = PlayingField.Controls.Cast<Button>().Where(f =>
+                            f.Name.Contains(combination.first.ToString()) ||
+                            f.Name.Contains(combination.second.ToString()) ||
+                            f.Name.Contains(combination.third.ToString())).ToArray();
+
+                        Button button;
+
+                        //Make sure the tile is free
+                        button = buttons.Where(f => f.Text == "").FirstOrDefault();
+
+                        if (button != null)
+                        {
+                            PlayingField.Enabled = true;
+                            button.PerformClick();
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+        private bool BlockFromWin()
+        {
+            if (Player1Inventory.Count > 1) //AI Checks if opponent is close to a combination
+            {
+                foreach (var combination in Combinations)
+                {
+                    int neroticy = 0;
+
+                    if (Player1Inventory.Contains(combination.first))
+                    {
+                        neroticy++;
+                    }
+
+                    if (Player1Inventory.Contains(combination.second))
+                    {
+                        neroticy++;
+                    }
+
+                    if (Player1Inventory.Contains(combination.third))
+                    {
+                        neroticy++;
+                    }
+
+                    if (neroticy == 2)
+                    {
+                        //Get the buttons that opponent needs to combo out.
+                        Button[] buttons = PlayingField.Controls.Cast<Button>().Where(f =>
+                            f.Name.Contains(combination.first.ToString()) ||
+                            f.Name.Contains(combination.second.ToString()) ||
+                            f.Name.Contains(combination.third.ToString())).ToArray();
+
+                        Button button;
+                        //Make sure the tile is free
+                        button = buttons.Where(f => f.Text == "").FirstOrDefault();
+
+                        if (button != null)
+                        {
+                            PlayingField.Enabled = true;
+                            button.PerformClick();
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
         }
 
         private void ResetGame()

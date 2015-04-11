@@ -7,3 +7,11 @@ C:\Users\l.pijlman.MCO\Desktop\Qmanage API\Qmanage test\TicTacToe\TicTacToe\obj\
 C:\Users\l.pijlman.MCO\Desktop\Qmanage API\Qmanage test\TicTacToe\TicTacToe\obj\Debug\TicTacToe.csproj.GenerateResource.Cache
 C:\Users\l.pijlman.MCO\Desktop\Qmanage API\Qmanage test\TicTacToe\TicTacToe\obj\Debug\TicTacToe.exe
 C:\Users\l.pijlman.MCO\Desktop\Qmanage API\Qmanage test\TicTacToe\TicTacToe\obj\Debug\TicTacToe.pdb
+G:\Users\Alyssa\Documents\GitHub\TicTacToe\TicTacToe\bin\Debug\TicTacToe.exe.config
+G:\Users\Alyssa\Documents\GitHub\TicTacToe\TicTacToe\obj\Debug\TicTacToe.exe
+G:\Users\Alyssa\Documents\GitHub\TicTacToe\TicTacToe\obj\Debug\TicTacToe.pdb
+G:\Users\Alyssa\Documents\GitHub\TicTacToe\TicTacToe\bin\Debug\TicTacToe.exe
+G:\Users\Alyssa\Documents\GitHub\TicTacToe\TicTacToe\bin\Debug\TicTacToe.pdb
+G:\Users\Alyssa\Documents\GitHub\TicTacToe\TicTacToe\obj\Debug\TicTacToe.Form1.resources
+G:\Users\Alyssa\Documents\GitHub\TicTacToe\TicTacToe\obj\Debug\TicTacToe.Properties.Resources.resources
+G:\Users\Alyssa\Documents\GitHub\TicTacToe\TicTacToe\obj\Debug\TicTacToe.csproj.GenerateResource.Cache
