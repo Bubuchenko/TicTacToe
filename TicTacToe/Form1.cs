@@ -24,8 +24,6 @@ namespace TicTacToe
 
         //Random class used for the initial step of the AI.
         Random random = new Random();
-
-
         private bool Player2FirstTurn
         {
             get
@@ -36,7 +34,6 @@ namespace TicTacToe
                     return true;
             }
         }
-
         private int Player2TurnCount
         {
             get
@@ -44,7 +41,7 @@ namespace TicTacToe
                 return Player2Inventory.Count() + 1;
             }
         }
-
+        private GameMode Gamemode { get; set; }
         private int Player2CornersOwned
         {
             get
@@ -61,7 +58,6 @@ namespace TicTacToe
                 return count;
             }
         }
-
         private int PlayerCornersOwned(Players player)
         {
             if (player == Players.Player1)
@@ -89,7 +85,6 @@ namespace TicTacToe
                 return count;
             }
         }
-
         private int PlayerEdgesOwned(Players player)
         {
             if (player == Players.Player1)
@@ -117,7 +112,6 @@ namespace TicTacToe
                 return count;
             }
         }
-
         private int Player1EdgesOwned
         {
             get
@@ -134,7 +128,6 @@ namespace TicTacToe
                 return count;
             }
         }
-
         private Players _turn;
         public Players Turn
         {
@@ -144,15 +137,13 @@ namespace TicTacToe
                 _turn = value;
             }
         }
-
         public Form1()
         {
-            //Initialize winning combo list
+            //Initialize lists
             AddCombinationsToList();
             AddOppositesToList();
             InitializeComponent();
         }
-
         private void AddCombinationsToList()
         {
             //Horizontal wins
@@ -168,7 +159,6 @@ namespace TicTacToe
             Combinations.Add(new Combination { first = 0, second = 4, third = 8 });
             Combinations.Add(new Combination { first = 2, second = 4, third = 6 });
         }
-
         private void AddOppositesToList()
         {
             CornerOpposites.Add(0, 8);
@@ -176,28 +166,22 @@ namespace TicTacToe
             CornerOpposites.Add(6, 2);
             CornerOpposites.Add(8, 0);
         }
-
         private int GetOppositeOfCorner(int corner)
         {
             return CornerOpposites[corner];
         }
-
-
-
         private void Form1_Load(object sender, EventArgs e)
         {
+            Gamemode = GameMode.PlayervsPC;
             Turn = Players.Player2;
             AIMakeMove();
         }
-
-
         public struct Combination
         {
             public int first { get; set; }
             public int second { get; set; }
             public int third { get; set; }
         }
-
         private void FieldClicked(object sender, EventArgs e)
         {
             if (Turn == Players.Player1)
@@ -206,11 +190,15 @@ namespace TicTacToe
                 (sender as Button).Enabled = false;
                 Player1Inventory.Add(int.Parse((sender as Button).Name.Substring(1, 1)));
                 Turn = Players.Player2;
-                PlayingField.Enabled = false;
 
-                if (!CheckForWins())
+                if (Gamemode == GameMode.PlayervsPC)
                 {
-                    AIMakeMove();
+                    PlayingField.Enabled = false;
+
+                    if (!CheckForWins())
+                    {
+                        AIMakeMove();
+                    }
                 }
             }
             else if (Turn == Players.Player2)
@@ -226,7 +214,6 @@ namespace TicTacToe
             CheckForWins();
             CheckForDraws();
         }
-
         private bool CheckForWins()
         {
             foreach (var combination in Combinations)
@@ -248,7 +235,6 @@ namespace TicTacToe
             }
             return false;
         }
-
         private void CheckForDraws()
         {
             if (Player1Inventory.Count + Player2Inventory.Count == 9)
@@ -258,7 +244,6 @@ namespace TicTacToe
                 ResetGame();
             }
         }
-
         private async void AIMakeMove()
         {
             PlayingField.Enabled = false;
@@ -307,6 +292,98 @@ namespace TicTacToe
                     PlayingField.Controls.Cast<Button>().Where(f => f.Name.Contains(GetOppositeOfCorner(Player2Inventory[0]).ToString())).FirstOrDefault().PerformClick();
                     return;
                 }
+
+                //Opponent made edge move on first turn (Opponent will lose badly..)
+                if (PlayerHasEdge && Player2TurnCount == 2)
+                {
+                    //Holds the move that will be set based on the decision the AI makes
+                    int move = 0;
+
+                    #region Long switch statement that allows the computer to win instantaneously if player 2 starts out on an edge block
+                    switch (Player1Inventory[0])
+                    {
+                        case 1:
+                            if (Player2Inventory[0] == 0)
+                            {
+                                move = 6;
+                            }
+                            else if (Player2Inventory[0] == 2)
+                            {
+                                move = 8;
+                            }
+                            else if (Player2Inventory[0] == 6)
+                            {
+                                move = 8;
+                            }
+                            else if (Player2Inventory[0] == 8)
+                            {
+                                move = 6;
+                            }
+                            break;
+
+                        case 3:
+                            if (Player2Inventory[0] == 0)
+                            {
+                                move = 2;
+                            }
+                            else if (Player2Inventory[0] == 2)
+                            {
+                                move = 8;
+                            }
+                            else if (Player2Inventory[0] == 6)
+                            {
+                                move = 8;
+                            }
+                            else if (Player2Inventory[0] == 8)
+                            {
+                                move = 2;
+                            }
+                            break;
+
+                        case 5:
+                            if (Player2Inventory[0] == 0)
+                            {
+                                move = 6;
+                            }
+                            else if (Player2Inventory[0] == 2)
+                            {
+                                move = 0;
+                            }
+                            else if (Player2Inventory[0] == 6)
+                            {
+                                move = 0;
+                            }
+                            else if (Player2Inventory[0] == 8)
+                            {
+                                move = 6;
+                            }
+                            break;
+
+                        case 7:
+                            if (Player2Inventory[0] == 0)
+                            {
+                                move = 2;
+                            }
+                            else if (Player2Inventory[0] == 2)
+                            {
+                                move = 0;
+                            }
+                            else if (Player2Inventory[0] == 6)
+                            {
+                                move = 0;
+                            }
+                            else if (Player2Inventory[0] == 8)
+                            {
+                                move = 2;
+                            }
+                            break;
+                    }
+                    #endregion
+
+                    PlayingField.Enabled = true;
+                    PlayingField.Controls.Cast<Button>().Where(f => f.Name.Contains(move.ToString())).FirstOrDefault().PerformClick();
+                    return;
+                }
             }
 
             if(Player2TurnCount == 3)
@@ -323,8 +400,17 @@ namespace TicTacToe
             MakeCornerMove();
             return;
         }
+        private bool PlayerHasEdge
+        {
+            get
+            {
+                foreach (int i in Edges)
+                    if (Player1Inventory.Contains(i))
+                        return true;
 
-
+                return false;
+            }
+        }
         private void MakeRandomMove()
         {
             //Perform a regular move
@@ -341,7 +427,6 @@ namespace TicTacToe
             PlayingField.Enabled = true;
             btn.PerformClick();
         }
-
         private void MakeCornerMove()
         {
             Button bt;
@@ -358,7 +443,6 @@ namespace TicTacToe
             PlayingField.Enabled = true;
             bt.PerformClick();
         }
-
         private bool CloseMyWin()
         {
             //AI Checks if I am close to a combination
@@ -454,7 +538,6 @@ namespace TicTacToe
             }
             return false;
         }
-
         private void ResetGame()
         {
             foreach (Button button in PlayingField.Controls)
@@ -467,13 +550,41 @@ namespace TicTacToe
             Player2Inventory.Clear();
 
             Turn = Players.Player2;
-            AIMakeMove();
+
+            if (Gamemode == GameMode.PlayervsPC)
+            {
+                AIMakeMove();
+            }
+        }
+        private async void button1_Click(object sender, EventArgs e)
+        {
+            Gamemode = GameMode.PlayervsPlayer;
+            ResetGame();
+            button1.Enabled = false;
+
+            //Avoid game mode switch spam shennanigans
+            await Task.Delay(2000);
+            button2.Enabled = true;
+        }
+        private async void button2_Click(object sender, EventArgs e)
+        {
+            Gamemode = GameMode.PlayervsPC;
+            ResetGame();
+            button2.Enabled = false;
+
+            //Avoid game mode switch spam shennanigans
+            await Task.Delay(2000);
+            button1.Enabled = true;
         }
     }
-
     public enum Players
     {
         Player1,
         Player2
+    }
+    public enum GameMode
+    {
+        PlayervsPC,
+        PlayervsPlayer,
     }
 }

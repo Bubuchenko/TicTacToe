@@ -15,3 +15,4 @@ G:\Users\Alyssa\Documents\GitHub\TicTacToe\TicTacToe\bin\Debug\TicTacToe.pdb
 G:\Users\Alyssa\Documents\GitHub\TicTacToe\TicTacToe\obj\Debug\TicTacToe.Form1.resources
 G:\Users\Alyssa\Documents\GitHub\TicTacToe\TicTacToe\obj\Debug\TicTacToe.Properties.Resources.resources
 G:\Users\Alyssa\Documents\GitHub\TicTacToe\TicTacToe\obj\Debug\TicTacToe.csproj.GenerateResource.Cache
+G:\Users\Alyssa\Documents\GitHub\TicTacToe\TicTacToe\obj\Debug\TicTacToe.csprojResolveAssemblyReference.cache

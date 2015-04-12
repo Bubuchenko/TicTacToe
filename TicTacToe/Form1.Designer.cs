@@ -46,6 +46,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.drawScore = new System.Windows.Forms.TextBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.PlayingField.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -229,7 +231,7 @@
             this.label1.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.label1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label1.Font = new System.Drawing.Font("Calibri", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(475, 251);
+            this.label1.Location = new System.Drawing.Point(475, 247);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(160, 38);
             this.label1.TabIndex = 14;
@@ -240,7 +242,7 @@
             this.drawScore.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.drawScore.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.drawScore.Font = new System.Drawing.Font("Calibri", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.drawScore.Location = new System.Drawing.Point(500, 290);
+            this.drawScore.Location = new System.Drawing.Point(500, 286);
             this.drawScore.Name = "drawScore";
             this.drawScore.ReadOnly = true;
             this.drawScore.ShortcutsEnabled = false;
@@ -253,12 +255,41 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = global::TicTacToe.Properties.Resources.logo;
-            this.pictureBox1.Location = new System.Drawing.Point(440, 18);
+            this.pictureBox1.Location = new System.Drawing.Point(440, 11);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(225, 127);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 16;
             this.pictureBox1.TabStop = false;
+            // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button1.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.Location = new System.Drawing.Point(457, 347);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(93, 27);
+            this.button1.TabIndex = 17;
+            this.button1.TabStop = false;
+            this.button1.Text = "Versus Player";
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // button2
+            // 
+            this.button2.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.button2.Enabled = false;
+            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button2.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button2.Location = new System.Drawing.Point(556, 347);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(93, 27);
+            this.button2.TabIndex = 18;
+            this.button2.TabStop = false;
+            this.button2.Text = "versus PC";
+            this.button2.UseVisualStyleBackColor = false;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // Form1
             // 
@@ -266,6 +297,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.SteelBlue;
             this.ClientSize = new System.Drawing.Size(673, 386);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.drawScore);
             this.Controls.Add(this.label1);
@@ -277,7 +310,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Text = "Tic Tac Boom";
+            this.Text = "Tic Tac Boom™";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.PlayingField.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -305,6 +338,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox drawScore;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
     }
 }
 
